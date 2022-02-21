@@ -223,15 +223,38 @@ Resources:
           import boto3
           client = boto3.client('redshift-data')
 
-
           def lambda_handler(event, context):
-              response = client.list_databases(
-                  ClusterIdentifier='privatesubnetredshiftcluster-tnojdx9cxjfu',
-                  Database='dev',
-                  DbUser='awsuser',
-                  MaxResults=123
+              
+              clusterIdentifier = 'privatesubnetredshiftcluster-tnojdx9cxjfu'
+              database = 'dev'
+              dbUser = 'awsuser'
+              
+              #check if public.insertdemotable exists.
+              
+              tableSearch = client.list_tables(
+                  ClusterIdentifier=clusterIdentifier,
+                  Database=database,
+                  DbUser=dbUser,
+                  MaxResults=123,
+                  SchemaPattern='public',
+                  TablePattern='insertdemotable'
               )
-              return(response)
+              
+              doesDemoTableExist = (len(tableSearch["Tables"]) > 0)
+              
+              #if not, execute code that creates a demotable. 
+              if doesDemoTableExist==False:
+                  print('creating table...')
+                  response = client.execute_statement(
+                      ClusterIdentifier=clusterIdentifier,
+                      Database=database,
+                      DbUser=dbUser,
+                      Sql='CREATE TABLE insertdemotable (ID INT NOT NULL, CityName VARCHAR(255) NOT NULL);',
+                      StatementName='insertSQLOperation',
+                      WithEvent=False
+                  )
+                  
+                  print(response)
 
 
 
