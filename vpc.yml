@@ -249,7 +249,7 @@ Resources:
                       ClusterIdentifier=clusterIdentifier,
                       Database=database,
                       DbUser=dbUser,
-                      Sql='CREATE TABLE insertdemotable (ID INT NOT NULL, CityName VARCHAR(255) NOT NULL);',
+                      Sql='CREATE TABLE insertdemotable (ID INT IDENTITY(0,1), CityName VARCHAR(255) NOT NULL, PRIMARY KEY( id ));',
                       StatementName='insertSQLOperation',
                       WithEvent=False
                   )
