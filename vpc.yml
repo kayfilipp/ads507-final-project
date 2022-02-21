@@ -242,7 +242,7 @@ Resources:
               
               doesDemoTableExist = (len(tableSearch["Tables"]) > 0)
               
-              #if not, execute code that creates a demotable. 
+              # if not, execute code that creates a demotable. 
               if doesDemoTableExist==False:
                   print('creating table...')
                   response = client.execute_statement(
@@ -255,6 +255,19 @@ Resources:
                   )
                   
                   print(response)
+
+              # insert a row! 
+              print('adding row...')
+              insertRow = client.execute_statement(
+                  ClusterIdentifier=clusterIdentifier,
+                  Database=database,
+                  DbUser=dbUser,
+                  Sql='INSERT INTO insertdemotable VALUES(10,''''Tel Aviv'''');',
+                  StatementName='InsertCitySQL',
+                  WithEvent=False
+              )
+              
+              return(insertRow['ResponseMetadata'])
 
 
 
