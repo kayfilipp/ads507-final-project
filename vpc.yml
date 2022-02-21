@@ -171,9 +171,7 @@ Resources:
       NumberOfNodes: 2
       ClusterSubnetGroupName: !Ref PrivateClusterSubnetGroup
 
-# to-do: provision a lambda that runs inside the same vpc and has visibility to our redshift cluster. 
-
-# to-do: provision a role for our lambda that allows it to exec queries, look at results, view tables, dbs, etc.
+# provision a role for our lambda that allows it to exec queries, look at results, view tables, dbs, etc.
   LambdaRedshiftRole:
     Type: AWS::IAM::Role
     Properties:
@@ -209,7 +207,6 @@ Resources:
                 Resource: "*"
 
   # create a lambda function that tries to query redshift for databases.
-
   # to-do: figure out a way to make the database, dbuser, and clusterID params automatically embedded during stack formation.
 
   PrivateRedshiftLambda:
@@ -269,6 +266,7 @@ Resources:
               
               return(insertRow['ResponseMetadata'])
 
+# to-do: figure out an eventbus provision that lets this code run every five minutes.
 
 
 Outputs:
