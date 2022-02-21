@@ -173,7 +173,7 @@ Resources:
 
 # to-do: provision a lambda that runs inside the same vpc and has visibility to our redshift cluster. 
 
-# to-do: provision a role for our lambda.
+# to-do: provision a role for our lambda that allows it to exec queries, look at results, view tables, dbs, etc.
   LambdaRedshiftRole:
     Type: AWS::IAM::Role
     Properties:
@@ -208,7 +208,10 @@ Resources:
                 - redshift-data:ListTables
                 Resource: "*"
 
-  # create a lambda function that tries to query redshift.
+  # create a lambda function that tries to query redshift for databases.
+
+  # to-do: figure out a way to make the database, dbuser, and clusterID params automatically embedded during stack formation.
+
   PrivateRedshiftLambda:
     Type: AWS::Lambda::Function
     Properties:
