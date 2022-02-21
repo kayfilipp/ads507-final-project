@@ -207,7 +207,7 @@ Resources:
                 Resource: "*"
 
   # create a lambda function that tries to query redshift for databases.
-  # to-do: figure out a way to make the database, dbuser, and clusterID params automatically embedded during stack formation.
+  # create env variables we can pass to our client.list_tables, exec functions
 
   PrivateRedshiftLambda:
     Type: AWS::Lambda::Function
@@ -272,8 +272,7 @@ Resources:
               
               return(insertRow['ResponseMetadata'])
 
-# to-do: figure out an eventbus provision that lets this code run every five minutes.
-
+  # provision a rule that runs every five minutes and targets the lambda we made.
   LambdaFiveMinuteExecRule:
     Type: AWS::Events::Rule
     Properties:
@@ -282,6 +281,8 @@ Resources:
       Targets:
         - Arn: !GetAtt PrivateRedshiftLambda.Arn
           Id: 1
+
+  # provision a permission object that lets our rule invoke the lambda.
   LambdaFiveMinuteExecRulePermission:
     Type: AWS::Lambda::Permission
     Properties:
