@@ -23,7 +23,38 @@ Parameters:
     Type: String
     Default: 10.0.20.0/24
 
+  DbName:
+    Description: Please enter the name of the database to create in redshift. 
+    Type: String 
+    AllowedPattern: "([a-z])([a-z]|[0-9])*"
+    Default: dev
+
+  DbUsername:
+    Description: Please enter the name of the master user for your redshift database.
+    Type: String 
+    AllowedPattern: "([a-z])([a-z]|[0-9])*"
+    Default: awsuser
+
+  DbPassword:
+    Description: Please enter the name of the master pasword for your redshift database.
+    Type: String 
+    AllowedPattern: "([A-Z])([a-z]|[0-9])*"
+    Default: Awsuser123
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      -
+        Label:
+          default: "Input Parameters"
+        Parameters:
+        - DbName
+        - DbUsername
+
 Resources:
+
+#provision a VPC with a public and private subnet. Each of these should have a route table. 
+
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
@@ -120,6 +151,8 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable
       SubnetId: !Ref PrivateSubnet1
 
+# add a private subnet cluster group and attach our redshift cluster to that group so it runs on our vpc.
+
   PrivateClusterSubnetGroup:
     Type: AWS::Redshift::ClusterSubnetGroup
     Properties:
@@ -130,13 +163,66 @@ Resources:
   PrivateSubnetRedshiftCluster:
     Type: AWS::Redshift::Cluster
     Properties:
-      MasterUsername: admin
-      MasterUserPassword: Admin123!
+      MasterUsername: !Sub ${DbUsername}
+      MasterUserPassword: !Sub ${DbPassword}
       NodeType: dc2.large
       ClusterType: multi-node 
-      DBName: dev
+      DBName: !Sub ${DbName}
       NumberOfNodes: 2
       ClusterSubnetGroupName: !Ref PrivateClusterSubnetGroup
+
+# to-do: provision a lambda that runs inside the same vpc and has visibility to our redshift cluster. 
+
+# to-do: provision a role for our lambda.
+  LambdaRedshiftRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: RedshiftAccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: redshift:GetClusterCredentials
+                Resource: 
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:cluster:${PrivateSubnetRedshiftCluster}
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:dbname:${PrivateSubnetRedshiftCluster}/${DbName}
+                  - !Sub arn:aws:redshift:${AWS::Region}:${AWS::AccountId}:dbuser:${PrivateSubnetRedshiftCluster}/${DbUsername}
+              - Effect: Allow 
+                Action:
+                - redshift-data:ExecuteStatement
+                - redshift-data:ListStatements
+                - redshift-data:GetStatementResult
+                - redshift-data:DescribeStatement
+                Resource: "*"
+
+  # create a lambda function that tries to query redshift.
+  PrivateRedshiftLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaRedshiftRole.Arn
+      Runtime: python3.6
+      Code:
+        ZipFile: |
+          import boto3
+          client = boto3.client('redshift-data')
+
+
+          def lambda_handler(event, context):
+              response = client.get_parameter(Name='dbUsername')
+            print(f'SSM dbUsername parameter value: {response["Parameter"]["Value"]}')
+
 
 
 Outputs:
