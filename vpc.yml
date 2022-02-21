@@ -223,6 +223,7 @@ Resources:
       Code:
         ZipFile: |
           import boto3
+          import os 
           client = boto3.client('redshift-data')
 
           def lambda_handler(event, context):
