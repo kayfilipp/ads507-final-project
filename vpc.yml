@@ -222,8 +222,13 @@ Resources:
 
 
           def lambda_handler(event, context):
-              response = client.get_parameter(Name='dbUsername')
-            print(f'SSM dbUsername parameter value: {response["Parameter"]["Value"]}')
+              response = client.list_databases(
+                  ClusterIdentifier='privatesubnetredshiftcluster-tnojdx9cxjfu',
+                  Database='dev',
+                  DbUser='awsuser',
+                  MaxResults=123
+              )
+              return(response)
 
 
 
