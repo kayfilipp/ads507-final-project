@@ -278,11 +278,17 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       Description: Creates a rule that executes the PrivateRedshiftLambda function every five minutes. 
-      ScheduleExpression: cron(0/5 * * * ? *)
+      ScheduleExpression: rate(5 minutes)
       Targets:
         - Arn: !GetAtt PrivateRedshiftLambda.Arn
           Id: 1
-        
+  LambdaFiveMinuteExecRulePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !GetAtt PrivateRedshiftLambda.Arn
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt LambdaFiveMinuteExecRule.Arn 
 
 
 Outputs:
