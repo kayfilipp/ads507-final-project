@@ -204,6 +204,8 @@ Resources:
                 - redshift-data:ListStatements
                 - redshift-data:GetStatementResult
                 - redshift-data:DescribeStatement
+                - redshift-data:ListDatabases
+                - redshift-data:ListTables
                 Resource: "*"
 
   # create a lambda function that tries to query redshift.
