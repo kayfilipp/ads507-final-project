@@ -262,7 +262,7 @@ Resources:
                   ClusterIdentifier=clusterIdentifier,
                   Database=database,
                   DbUser=dbUser,
-                  Sql='INSERT INTO insertdemotable VALUES(10,''''Tel Aviv'''');',
+                  Sql="INSERT INTO insertdemotable(CityName) VALUES('Tel-Aviv');",
                   StatementName='InsertCitySQL',
                   WithEvent=False
               )
