@@ -48,7 +48,7 @@ Metadata:
 
 Resources:
 
-#provision a VPC with a public and private subnet. Each of these should have a route table. 
+#provision a VPC with a private subnet.
 
   Vpc:
     Type: AWS::EC2::VPC
