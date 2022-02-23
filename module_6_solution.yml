@@ -1,7 +1,7 @@
 # Add Format Version section here.
 AWSTemplateFormatVersion: "2010-09-09"
 
-Description: AWS Cloud  module 6 => provision a Vpc with 2 subnets, one public - one private, a redshift cluster, a lamda function, and a bus that runs it every 5 minutes
+Description: AWS Cloud  module 6 => provision a Vpc with a private subnet, a redshift cluster, a lamda function, and a bus that runs it every 5 minutes
 
 Parameters:
   EnvironmentName:
