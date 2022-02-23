@@ -138,9 +138,23 @@ Resources:
         ZipFile: |
           import boto3
           import os 
+          import json
+
+          #deprecated but should satisfy the requirements for this assignment.
+          import botocore.vendored.requests as requests
+
           client = boto3.client('redshift-data')
 
           def lambda_handler(event, context):
+              
+              #query a random wikipedia article and pull the first title we see:
+                  # 1. get the content from the response
+                  # 2. split body to get the first instance of the title container, split that by the closing tag to get 
+                  # the inner contents
+                  # 3. get everything before the " - Wikipedia " Suffix to get the title of the article.
+                  
+              req = str(requests.get("https://en.wikipedia.org/wiki/Special:Random").content)
+              wikiTitle = req.split("<title>")[1].split("</title>")[0].split(" - ")[0]
               
               clusterIdentifier = os.environ["CLUSTER_ID"]
               database = os.environ["DATABASE_NAME"]
@@ -166,7 +180,7 @@ Resources:
                       ClusterIdentifier=clusterIdentifier,
                       Database=database,
                       DbUser=dbUser,
-                      Sql='CREATE TABLE insertdemotable (ID INT IDENTITY(0,1), CityName VARCHAR(255) NOT NULL, PRIMARY KEY( id ));',
+                      Sql='CREATE TABLE insertdemotable (ID INT IDENTITY(0,1), WikiTitle VARCHAR(255) NOT NULL, PRIMARY KEY( id ));',
                       StatementName='insertSQLOperation',
                       WithEvent=False
                   )
@@ -179,12 +193,14 @@ Resources:
                   ClusterIdentifier=clusterIdentifier,
                   Database=database,
                   DbUser=dbUser,
-                  Sql="INSERT INTO insertdemotable(CityName) VALUES('Tel-Aviv');",
-                  StatementName='InsertCitySQL',
+                  Sql= f"INSERT INTO insertdemotable(WikiTitle) VALUES ('{wikiTitle}');",
+                  StatementName='InsertWikiSQL',
                   WithEvent=False
               )
               
+              print(wikiTitle)
               return(insertRow['ResponseMetadata'])
+
 
   # provision a rule that runs every five minutes and targets the lambda we made.
   LambdaFiveMinuteExecRule:
