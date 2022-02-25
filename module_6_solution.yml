@@ -14,7 +14,7 @@ Parameters:
     Default: 10.0.0.0/16
 
   PrivateSubnet1CIDR:
-    Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
+    Description: Please enter the IP range (CIDR notation) for the private subnet 
     Type: String
     Default: 10.0.20.0/24
 
@@ -228,5 +228,5 @@ Outputs:
     Value: !Ref Vpc
 
   PrivateSubnet1:
-    Description: A reference to the private subnet in the 1st Availability Zone
+    Description: A reference to the private subnet 
     Value: !Ref PrivateSubnet1
