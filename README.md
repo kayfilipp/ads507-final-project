@@ -8,6 +8,13 @@ This project demonstrates mastery of:
   <li>Deploying a Cloudformation Stack with a scheduled lambda that runs every five minutes</li>
 </ul>
 
+<h5><b>Technical Stack:</b></h5>
+<ul>
+    <li>Python (lambda construction)</li>
+    <li>AWS SDK</li>
+    <li>SQL</li>
+</ul>
+
 <h4><b>Cloudformation Deployment</b></h4>
 <h5><b>Summary</b></h5><br>
 <p>
@@ -19,5 +26,8 @@ This project demonstrates mastery of:
 
 <h5><b>Usage and Deployment</b></h5>
 <ol type="i">
-    <li></li>
+    <li>Download the module_6_solution.yaml file locally.</li>
+    <li>Provided you have an AWS account, go to cloudformation.</li>
+    <li>Click "Create Stack" using new resources.</li>
+    <li>When prompted, submit the .yaml template.</li>
 </ol>
