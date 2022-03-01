@@ -1,4 +1,4 @@
-<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/768px-Amazon_Web_Services_Logo.svg.png' width=128 height=128></img>
+<img src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/768px-Amazon_Web_Services_Logo.svg.png' width=128 height=100></img><br>
 "# ads507-final-project" 
 
 This project demonstrates mastery of:
