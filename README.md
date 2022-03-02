@@ -30,4 +30,5 @@ This project demonstrates mastery of:
     <li>Provided you have an AWS account, go to cloudformation.</li>
     <li>Click "Create Stack" using new resources.</li>
     <li>When prompted, submit the .yaml template.</li>
+    <li>(Optional) Modify any of the IPV4 CIDR Blocks, database credentials, or environment variables for stylistic preferences. This template will deploy properly with default values.</li>
 </ol>
