@@ -20,4 +20,5 @@ Here you can see the public schema of database:
 <img width="615" alt="Assignment 5 1 Image" src="https://user-images.githubusercontent.com/84368057/157164342-94e56128-6f07-4fd1-9b50-45350c127250.png">
 
 
-The optimization approach are provided at https://github.com/kayfilipp/optimize-sql-query-and-deploy-aws-cloudformation-stack/blob/main/Module_5_solution.pdf
+The optimization approach are provided at:
+https://github.com/kayfilipp/optimize-sql-query-and-deploy-aws-cloudformation-stack/blob/main/Module_5_solution.pdf
